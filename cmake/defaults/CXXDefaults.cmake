@@ -31,6 +31,8 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     include(clangdefaults)
 elseif(MSVC)
     include(msvcdefaults)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    include(iccdefaults)
 endif()
 
 # We don't use this prefix in the open source build
