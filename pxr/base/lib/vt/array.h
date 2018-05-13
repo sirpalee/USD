@@ -48,6 +48,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <memory>
+#include <initializer_list>
 
 PXR_NAMESPACE_OPEN_SCOPE
 
@@ -300,6 +301,11 @@ class VtArray : public Vt_ArrayBase {
     explicit VtArray(size_t n, value_type const &value = value_type())
         : VtArray() {
         assign(n, value);
+    }
+
+    /// Create an array filled with values from the \p l initializer list.
+    VtArray(std::initializer_list<ELEM> l) {
+        assign(l.begin(), l.end());
     }
 
     ~VtArray() { _DecRef(); }

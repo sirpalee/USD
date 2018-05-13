@@ -133,7 +133,7 @@ VtValue
 UsdImagingSphereAdapter::GetMeshPoints(UsdPrim const& prim, 
                                        UsdTimeCode time)
 {
-    static GfVec3f points[] = {
+    static VtArray<GfVec3f> points = {
         GfVec3f( 0.2384,  0.1483, -0.9511) ,GfVec3f( 0.0839,  0.2606, -0.9511) ,GfVec3f(-0.1071,  0.2606, -0.9511),
         GfVec3f(-0.2616,  0.1483, -0.9511) ,GfVec3f(-0.3206, -0.0333, -0.9511) ,GfVec3f(-0.2616, -0.2149, -0.9511),
         GfVec3f(-0.1071, -0.3272, -0.9511) ,GfVec3f( 0.0839, -0.3272, -0.9511) ,GfVec3f( 0.2384, -0.2149, -0.9511),
@@ -167,33 +167,21 @@ UsdImagingSphereAdapter::GetMeshPoints(UsdPrim const& prim,
         GfVec3f(-0.0116, -0.0333, -1.0000) ,GfVec3f(-0.0116, -0.0333,  1.0000),
     };
 
-    size_t numPoints = sizeof(points) / sizeof(points[0]);
-    VtArray<GfVec3f> output(numPoints);
-    std::copy(points, points + numPoints, output.begin());
-    return VtValue(output);
-}
-
-template <typename T>
-static VtArray<T>
-_BuildVtArray(T values[], int numValues)
-{
-    VtArray<T> result(numValues);
-    std::copy(values, values+numValues, result.begin());
-    return result;
+    return VtValue(points);
 }
 
 /*static*/
 VtValue
 UsdImagingSphereAdapter::GetMeshTopology()
 {
-    static int numVerts[] = {
+    static VtArray<int> numVerts = {
         4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4,
         4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4,
         4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4,
         4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4 ,4,
         3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3 ,3,
     };
-    static int verts[] = {
+    static VtArray<int> verts = {
         0 ,1 ,11 ,10 ,1 ,2 ,12 ,11 ,2 ,3 ,13 ,12 ,3 ,4 ,14 ,13 ,4 ,5 ,15 ,14, 5
             ,6 ,16 ,15 ,6 ,7 ,17 ,16 ,7 ,8 ,18 ,17 ,8 ,9 ,19 ,18 ,9 ,0 ,10 ,19,
         10 ,11 ,21 ,20 ,11 ,12 ,22 ,21 ,12 ,13 ,23 ,22 ,13 ,14 ,24 ,23 ,14 ,15
@@ -218,9 +206,9 @@ UsdImagingSphereAdapter::GetMeshTopology()
             ,91 ,87 ,88 ,91 ,88 ,89 ,91 ,89 ,80 ,91,
     };
     static HdMeshTopology sphereTopo(PxOsdOpenSubdivTokens->catmark,
-                                   HdTokens->rightHanded,
-               _BuildVtArray(numVerts, sizeof(numVerts) / sizeof(numVerts[0])),
-               _BuildVtArray(verts, sizeof(verts) / sizeof(verts[0])));
+                                     HdTokens->rightHanded,
+                                     numVerts,
+                                     verts);
     return VtValue(sphereTopo);
 }
 

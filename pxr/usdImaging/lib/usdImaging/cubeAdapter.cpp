@@ -131,7 +131,7 @@ VtValue
 UsdImagingCubeAdapter::GetMeshPoints(UsdPrim const& prim, 
                                      UsdTimeCode time)
 {
-    static GfVec3f points[] = {
+    static VtArray<GfVec3f> points = {
         GfVec3f( 0.5f, 0.5f, 0.5f ),
         GfVec3f(-0.5f, 0.5f, 0.5f ),
         GfVec3f(-0.5f,-0.5f, 0.5f ),
@@ -142,27 +142,15 @@ UsdImagingCubeAdapter::GetMeshPoints(UsdPrim const& prim,
         GfVec3f( 0.5f,-0.5f,-0.5f ),
     };
 
-    size_t numPoints = sizeof(points) / sizeof(points[0]);
-    VtArray<GfVec3f> output(numPoints);
-    std::copy(points, points + numPoints, output.begin());
-    return VtValue(output);
-}
-
-template <typename T>
-static VtArray<T>
-_BuildVtArray(T values[], int numValues)
-{
-    VtArray<T> result(numValues);
-    std::copy(values, values+numValues, result.begin());
-    return result;
+    return VtValue(points);
 }
 
 /*static*/
 VtValue
 UsdImagingCubeAdapter::GetMeshTopology()
 {
-    static int numVerts[] = { 4, 4, 4, 4, 4, 4 };
-    static int verts[] = {
+    static VtArray<int> numVerts = { 4, 4, 4, 4, 4, 4 };
+    static VtArray<int> verts = {
         0, 1, 2, 3,
         4, 5, 6, 7,
         0, 6, 5, 1,
@@ -172,8 +160,8 @@ UsdImagingCubeAdapter::GetMeshTopology()
     };
     static HdMeshTopology cubeTopo(PxOsdOpenSubdivTokens->bilinear,
                HdTokens->rightHanded,
-               _BuildVtArray(numVerts, sizeof(numVerts) / sizeof(numVerts[0])),
-               _BuildVtArray(verts, sizeof(verts) / sizeof(verts[0])));
+               numVerts,
+               verts);
     return VtValue(cubeTopo);
 }
 
